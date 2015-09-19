@@ -25,6 +25,7 @@
   "dependencies": {
     "blessed": "^0.1.81",
     "blessed-contrib": "^2.3.3",
+    "multicb": "^1.1.0",
     "pull-stream": "^2.28.4"
   }
 }
