@@ -32,6 +32,7 @@ createSbot.createClient({keys: keys})({port: config.port, host: config.host||'lo
   var grid = new contrib.grid({rows: 12, cols: 12, screen: screen})
 
   var table = contrib.table({
+    fg: 'default',
     keys: true,
     interactive: false,
     columnSpacing: 2, //in chars

@@ -29,95 +29,10 @@ var screen = blessed.screen({
   smartCSR: true,
   dockBorders: true
 })
-
-var feedList = blessed.list({    
-  parent: screen,
-  label: ' Feeds ',
-  top: 0,
-  right: 0,
-  width: '100%',
-  height: '100%',
-  keys: true,
-  vi: true,
-  interactive: true,
-  border: 'line',
-  scrollbar: {
-    ch: ' ',
-    track: {
-      bg: 'cyan'
-    },
-    style: {
-      inverse: true
-    }
-  },
-  invertSelected: false,
-  style: {
-    item: {
-      hover: {
-        bg: 'blue'
-      }
-    },
-    selected: {
-      fg: 'white',
-      bg: 'blue',
-      bold: true
-    }
-  }
-})
-
-var logList = blessed.list({    
-  parent: screen,
-  hidden: true,
-  top: 0,
-  right: 0,
-  width: '100%',
-  height: '100%',
-  keys: true,
-  vi: true,
-  interactive: true,
-  border: 'line',
-  scrollbar: {
-    ch: ' ',
-    track: {
-      bg: 'cyan'
-    },
-    style: {
-      inverse: true
-    }
-  },
-  invertSelected: false,
-  style: {
-    item: {
-      hover: {
-        bg: 'blue'
-      }
-    },
-    selected: {
-      fg: 'white',
-      bg: 'blue',
-      bold: true
-    }
-  }
-})
-logList.setIndex(1)
-var msgView = blessed.log({
-  parent: screen,
-  hidden: true,
-  top: 1,
-  right: 1,
-  width: '80%',
-  height: '80%',
-  border: 'line'
-})
-msgView.setIndex(2)
-
-screen.key(['escape', 'q'], function(ch, key) {
-  if (msgView.visible)
-    msgView.hide()
-  else if (logList.visible)
-    logList.hide()
-  screen.render()
-})
+var windows = require('./lib/windows')(screen)
+var feedList = require('./lib/widgets/feedlist')(screen)
+var logList = require('./lib/widgets/loglist')(screen)
+var msgView = require('./lib/widgets/msgview')(screen)
 
 screen.key(['C-c'], function(ch, key) {
   return process.exit(0)
@@ -134,24 +49,22 @@ createSbot.createClient({keys: keys})({port: config.port, host: config.host||'lo
     if (err) throw err
     var feeds = res[0]
     feedList.setItems(feedsToListData.apply(null, res))
-    screen.render()
+    windows.push(feedList)
 
     feedList.on('select', function (el, selected) {
       logList.setLabel(' Feed: ' + feeds[selected].id + ' ')
-      logList.show()
-      logList.focus()
+
       pull(sbot.createUserStream({ id: feeds[selected].id }), pull.collect(function (err, entries) {
         if (err) throw err
         entries.reverse()
         logList.setItems(entries.map(function (msg) { return JSON.stringify(msg.value.content) }))
         logList.select(0)
-        screen.render()
+        windows.push(logList)
 
         logList.removeAllListeners('select')
         logList.on('select', function (el, selected) {
-          msgView.show()
           msgView.content = JSON.stringify(entries[selected], 0, 2)
-          screen.render()
+          windows.push(msgView, { noFocus: true })
         })
       }))
     })
