@@ -2,28 +2,7 @@
 
 var blessed = require('blessed')
 var multicb = require('multicb')
-var path    = require('path')
 var pull    = require('pull-stream')
-var ssbKeys = require('scuttlebot/node_modules/ssb-keys')
-var config  = require('scuttlebot/node_modules/ssb-config/inject')(process.env.ssb_appname)
-
-var createSbot   = require('scuttlebot')
-  .use(require('scuttlebot/plugins/master'))
-  .use(require('scuttlebot/plugins/gossip'))
-  .use(require('scuttlebot/plugins/friends'))
-  .use(require('scuttlebot/plugins/replicate'))
-  .use(require('scuttlebot/plugins/blobs'))
-  .use(require('scuttlebot/plugins/invite'))
-  .use(require('scuttlebot/plugins/block'))
-  .use(require('scuttlebot/plugins/local'))
-  .use(require('scuttlebot/plugins/logging'))
-  .use(require('scuttlebot/plugins/private'))
-
-var keys = ssbKeys.loadOrCreateSync(path.join(config.path, 'secret'))
-
-if(keys.curve === 'k256')
-  throw new Error('k256 curves are no longer supported,'+
-                  'please delete' + path.join(config.path, 'secret'))
 
 var screen = blessed.screen({
   smartCSR: true,
@@ -38,7 +17,7 @@ screen.key(['C-c'], function(ch, key) {
   return process.exit(0)
 })
 
-createSbot.createClient({keys: keys})({port: config.port, host: config.host||'localhost', key: keys.id}, function (err, sbot) {
+require('./sbot')(function (err, sbot) {
   if(err) throw err
 
   var done = multicb({ pluck: 1 })
