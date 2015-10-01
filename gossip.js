@@ -4,7 +4,7 @@ var blessed = require('blessed')
 var contrib = require('blessed-contrib')
 var path    = require('path')
 
-require('./sbot')(function (err, sbot) {
+require('ssb-client')(function (err, sbot) {
   if(err) throw err
 
   var screen = blessed.screen()
