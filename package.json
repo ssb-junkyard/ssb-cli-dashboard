@@ -25,9 +25,11 @@
   "dependencies": {
     "blessed": "^0.1.81",
     "blessed-contrib": "^2.3.3",
-    "multicb": "^1.1.0",
+    "minimist": "^1.2.0",
+    "multicb": "^1.2.0",
     "pull-stream": "^2.28.4",
     "scuttlebot": "~7.2.5",
-    "ssb-client": "^2.0.0"
+    "ssb-client": "^2.0.0",
+    "ssb-ref": "^2.2.1"
   }
 }
