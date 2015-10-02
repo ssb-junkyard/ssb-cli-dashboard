@@ -8,18 +8,11 @@ module.exports = function (userId, sbot, screen) {
   // load data
   var blobs, blobMessageMap = {}
   pull(
-    sbot.links({ source: userId, dest: '&' }),
-    pull.asyncMap(function (index, cb) {
-      // fetch the messages
-      sbot.get(index.key, function (err, msg) {
-        if (err)
-          return cb(err)
-        index.value = msg
-        cb(null, index)
-      })
-    }),
+    // fetch messages by `userId` which link to a blob
+    sbot.links({ source: userId, dest: '&', values: true }),
+
+    // group together messages that publish a blob
     pull.filter(function (index) {
-      // group together messages that publish a blob
       var blobId = index.dest
       if (!blobMessageMap[blobId]) {
         blobMessageMap[blobId] = [index]
@@ -28,17 +21,22 @@ module.exports = function (userId, sbot, screen) {
       blobMessageMap[blobId].push(index)
       return false
     }),
+
+    // collect into an array
     pull.collect(function (err, _blobs) {
       if (err) throw err
       blobs = _blobs
 
+      // sort by the number of references to the blob
       blobs.sort(function (a, b) {
         return blobMessageMap[b.dest].length - blobMessageMap[a.dest].length
       })
 
-      listWidget.setItems(blobs.map(function (index) { 
+      // render in the list widget
+      var listItems = blobs.map(function (index) { 
         return index.dest + ' ('+blobMessageMap[index.dest].length+' references)'
-      }))
+      })
+      listWidget.setItems(listItems)
       listWidget.select(0)
       screen.render()
     })

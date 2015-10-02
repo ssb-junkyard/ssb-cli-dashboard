@@ -94,3 +94,137 @@ function feedsToListItems (feeds, follows, flags) {
   })
 }
 ```
+
+In `feed.js`, the list is a simple stream-fetch:
+
+```js
+pull(sbot.createUserStream({ id: userId }), pull.collect(function (err, log) {
+  // ...
+}))
+```
+
+`graph.js` uses the same code in `feeds.js`, but it applies a filter.
+It generates the filter using this function:
+
+```js
+function filteredFeeds (graph, inbound, label) {
+  var included = {}
+  sbot.friends.all(graph, function (err, g) {
+    if (inbound) {
+      // collect feeds with an edge to `userId`
+      for (var id2 in g)
+        if (g[id2][userId])
+          included[id2] = true
+    } else {
+      // use the already-computed `userId` edges
+      included = g[userId] || {}
+    }
+  })
+  function filter (entry) {
+    return included[entry.id]
+  }
+  // ...
+}
+```
+
+Here's how it's applied to create the four graph-filters:
+
+```js
+var graphs = {
+  'follows':   filteredFeeds('follow', false, 'Follows'),
+  'followers': filteredFeeds('follow', true, 'Followers'),
+  'flags':     filteredFeeds('flag', false, 'Flags'),
+  'flaggers':  filteredFeeds('flag', true, 'Flaggers'),
+}
+```
+
+`blobs.js` collects every reference to a blob made by the given `userId`, and lists them in the form:
+
+```
+blobid (N references)
+```
+
+It does this by first searching for any messages by `userId` that link to a blob.
+Then, it groups the messages by blob, producing the final list.
+
+```js
+var blobs, blobMessageMap = {}
+pull(
+  // fetch messages by `userId` which link to a blob
+  sbot.links({ source: userId, dest: '&', values: true }),
+
+  // group together messages that publish a blob
+  pull.filter(function (index) {
+    var blobId = index.dest
+    if (!blobMessageMap[blobId]) {
+      blobMessageMap[blobId] = [index]
+      return true
+    }
+    blobMessageMap[blobId].push(index)
+    return false
+  }),
+
+  // collect into an array
+  pull.collect(function (err, _blobs) {
+    if (err) throw err
+    blobs = _blobs
+
+    // sort by the number of references to the blob
+    blobs.sort(function (a, b) {
+      return blobMessageMap[b.dest].length - blobMessageMap[a.dest].length
+    })
+
+    // render in the list widget
+    var listItems = blobs.map(function (index) { 
+      return index.dest + ' ('+blobMessageMap[index.dest].length+' references)'
+    })
+    listWidget.setItems(listItems)
+    listWidget.select(0)
+    screen.render()
+  })
+)
+```
+
+Finally, `gossip.js` simply polls the status of the gossip-network and renders it periodically.
+
+```js
+function poll () {
+  sbot.gossip.peers(function (err, peers) {
+    if (err) throw err
+    table.setData(peersToTableData(peers))
+    screen.render()
+  })
+}
+
+poll()
+setInterval(poll, 1000)
+
+function status (peer) {
+  if (peer.connected)
+    return 'Connected'
+  if (peer.time && peer.time.connect > peer.time.attempt)
+    return 'Connecting'
+  if (peer.failure)
+    return peer.failure + ' Failures'
+  return 'Disconnected'
+}
+
+function peersToTableData (peers) {
+  peers.sort(function (a, b) {
+    var an = (a.announcers) ? a.announcers.length : 0
+    var bn = (b.announcers) ? b.announcers.length : 0
+    return bn - an
+  })
+
+  return {
+    headers: ['Announcers', 'Address', 'Status'],
+    data: peers.map(function (p) {
+      return [
+        (p.announcers) ? p.announcers.length : 0,
+        p.host + ':' + p.port + ':' + p.key,
+        status(p)
+      ]
+    })
+  }
+}
+```

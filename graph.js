@@ -6,29 +6,33 @@ var multicb = require('multicb')
 module.exports = function (graph, userId, sbot, screen) {
 
   var graphs = {
-    'follows':   feeds('follow', false, 'Follows'),
-    'followers': feeds('follow', true, 'Followers'),
-    'flags':     feeds('flag', false, 'Flags'),
-    'flaggers':  feeds('flag', true, 'Flaggers'),
+    'follows':   filteredFeeds('follow', false, 'Follows'),
+    'followers': filteredFeeds('follow', true, 'Followers'),
+    'flags':     filteredFeeds('flag', false, 'Flags'),
+    'flaggers':  filteredFeeds('flag', true, 'Flaggers'),
   }
 
-  function feeds (graph, inbound, label) {
-    // construct allow list
-    var allowed = {}
+  function filteredFeeds (graph, inbound, label) {
+    // construct list to render
+    var included = {}
     sbot.friends.all(graph, function (err, g) {
       if (inbound) {
+        // collect feeds with an edge to `userId`
         for (var id2 in g)
           if (g[id2][userId])
-            allowed[id2] = true
-      } else
-        allowed = g[userId] || {}
+            included[id2] = true
+      } else {
+        // use the already-computed `userId` edges
+        included = g[userId] || {}
+      }
     })
+    function filter (entry) {
+      return included[entry.id]
+    }
 
     // return function that'll construct the right view when called
     return function () {
-      var el = require('./feeds')(sbot, screen, function (entry) {
-        return allowed[entry.id]
-      })
+      var el = require('./feeds')(sbot, screen, filter)
       el.setLabel(label+': '+userId)
       return el
     }
