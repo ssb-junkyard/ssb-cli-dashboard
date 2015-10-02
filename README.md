@@ -9,10 +9,20 @@ npm install
 Then:
 
 ```
-./feeds.js    # feed explorer
-./gossip.js   # gossip status
+# list all feeds
+$ ./feeds.js
+
+# view the given feed
+$ ./feed.js {feedid}   
+
+# view blobs linked-to by the given feed
+$ ./blobs.js {feedid}
+
+# view feeds related to the given feed
+$ ./graph.js [follows|followers|flags|flaggers] {feedid}
+
+# network status
+$ ./gossip.js
 ```
 
-**Feeds.js**
-
-![./feeds.gif](./feeds.gif)
+![./demo.gif](./demo.gif)

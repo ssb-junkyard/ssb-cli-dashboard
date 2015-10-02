@@ -57,7 +57,7 @@ if (!module.parent) {
   var argv = require('minimist')(process.argv.slice(2))
   var userId = argv._[0]
   if (!require('ssb-ref').isFeed(userId)) {
-    console.error('Usage: user-blobs.js {feedid}')
+    console.error('Usage: blobs.js {feedid}')
     process.exit(1)
   }
   require('./lib/app')(module.exports.bind(null, userId))
