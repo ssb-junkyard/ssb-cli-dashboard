@@ -1,7 +1,7 @@
 # SSB Blessed Dashboard
 
 ```
-git clone https://github.com/pfraze/ssb-blessed-dashboard.git
+git clone https://github.com/ssbc/ssb-blessed-dashboard.git
 cd ssb-blessed-dashboard
 npm install
 ```
