@@ -1,0 +1,310 @@
+<html>
+    <head>
+    <title>Blessed Dashboard - Scuttlebot - SSBC</title>
+    <link rel="stylesheet" href="/normalize.css">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/atelier-forest-light.css">
+    <script src="/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+    <body>
+      <div id="topnav">
+    <div id="topnav-inner">
+      <a class="topnav-item " href="/" title="Home">
+      Home<br><small>SSBC</small>
+    </a>
+      <a class="topnav-item " href="/patchwork" title="Patchwork">
+      Patchwork<br><small>Social App</small>
+    </a>
+      <a class="topnav-item selected" href="/scuttlebot" title="Scuttlebot">
+      Scuttlebot<br><small>P2P Log Store</small>
+    </a>
+      <a class="topnav-item " href="/docs" title="Documentation">
+      Documentation<br><small>APIs, Articles</small>
+    </a>
+    </div>
+  </div>
+      <div id="layout">
+        <div id="leftnav">
+      <div class="leftnav-item ">
+      <a href="/scuttlebot" title="Scuttlebot">Scuttlebot</a>
+    </div>
+      <div class="leftnav-subitems">
+        <div class="leftnav-item ">
+      <a href="/docs/scuttlebot/install.html" title="Install">Install</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/scuttlebot/tutorial.html" title="Tutorial">Tutorial</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/api/scuttlebot.html" title="API / CLI Reference">API / CLI Reference</a>
+    </div>
+      </div>
+      <div class="leftnav-item">Examples</div>
+      <div class="leftnav-subitems">
+        <div class="leftnav-item selected">
+      <a href="/ssb-blessed-dashboard" title="Blessed Dashboard">Blessed Dashboard</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/ssb-example-whois" title="Simple "Whois"">Simple "Whois"</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/ssb-example-pm" title="Private Message">Private Message</a>
+    </div>
+      </div>
+      <div class="leftnav-item">Key Concepts</div>
+      <div class="leftnav-subitems">
+        <div class="leftnav-item ">
+      <a href="/secure-scuttlebutt" title="Secure Scuttlebutt: a global database protocol">Secure Scuttlebutt: a global database protocol</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/ssb/linking.html" title="Content-Hash Linking">Content-Hash Linking</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/ssb/secret-handshake.html" title="Secret Handshake: a secure channel protocol">Secret Handshake: a secure channel protocol</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/ssb/end-to-end-encryption.html" title="Private Box: metadata-free encryption">Private Box: metadata-free encryption</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/ssb/faq.html" title="Frequently Asked Questions">Frequently Asked Questions</a>
+    </div>
+      </div>
+      <div class="leftnav-item">Howto Guides</div>
+      <div class="leftnav-subitems">
+        <div class="leftnav-item ">
+      <a href="/docs/scuttlebot/howto-setup-a-pub.html" title="Setup a Pub">Setup a Pub</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/scuttlebot/howto-create-a-js-client.html" title="Create a JS Client">Create a JS Client</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/scuttlebot/howto-get-your-id.html" title="Get your ID">Get your ID</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/scuttlebot/howto-get-your-address.html" title="Get your Address">Get your Address</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/scuttlebot/howto-publish-a-post.html" title="Publish a Post">Publish a Post</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/scuttlebot/howto-publish-a-file.html" title="Publish a File">Publish a File</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/scuttlebot/howto-publish-encrypted-messages.html" title="Publish Encrypted Messages">Publish Encrypted Messages</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/scuttlebot/howto-follow-unfollow.html" title="Follow/Unfollow">Follow/Unfollow</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/scuttlebot/howto-announce-a-pub-server.html" title="Announce a Pub Server">Announce a Pub Server</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/scuttlebot/howto-create-an-invite.html" title="Create an Invite">Create an Invite</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/scuttlebot/howto-use-an-invite.html" title="Use an Invite">Use an Invite</a>
+    </div>
+        <div class="leftnav-item ">
+      <a href="/docs/scuttlebot/howto-update-your-profile.html" title="Update your Profile">Update your Profile</a>
+    </div>
+      </div>
+    </div>
+        <div id="content">
+          <h1 id="ssb-blessed-dashboard">SSB Blessed Dashboard</h1>
+<pre><code>git clone https://github.com/ssbc/ssb-blessed-dashboard.git
+cd ssb-blessed-dashboard
+npm install
+</code></pre><p>Then:</p>
+<pre><code># list all feeds
+$ ./feeds.js
+
+# view the given feed
+$ ./feed.js {feedid}   
+
+# view blobs linked-to by the given feed
+$ ./blobs.js {feedid}
+
+# view feeds related to the given feed
+$ ./graph.js [follows|followers|flags|flaggers] {feedid}
+
+# network status
+$ ./gossip.js
+</code></pre><p><img src="./demo.gif" alt="./demo.gif"></p>
+<h2 id="how-it-works">How it works</h2>
+<p>The <code>feeds.js</code> view pulls some metadata from Scuttlebot, and uses that to produce a master list of known feeds.</p>
+<pre><code class="lang-js">// load data from sbot
+var done = multicb({ pluck: 1, spread: true })
+
+pull(
+  sbot.latest(),                          // get the sequence number of the latest message of each known feed
+  (filter) ? pull.filter(filter) : null,  // apply a filter, if given
+  pull.collect(done())                    // collect into an array
+)
+sbot.friends.all(&#39;follow&#39;, done())        // fetch the computed follow-graph
+sbot.friends.all(&#39;flag&#39;, done())          // fetch the computed flag-graph
+
+done(function (err, feeds, follows, flags) {
+  // ...
+})
+</code></pre>
+<p>Each entry shows:</p>
+<pre><code>feedid [seq: N follows: N/N flags: N/N]
+</code></pre><p>Where, in the case of follows and flags, it&#39;s showing the outbound then inbound.
+It computes this info by counting directed-edges:</p>
+<pre><code class="lang-js">// helper to count how many nodes in the graph have edges pointing to the given ID
+// - graphs are given in the shape of { sourceIds: { destIds: true } }
+// - eg. if bob follows alice, the follow graph would include { bobsId: { alicesId: true } }
+// - if alice also followed bob, the follow graph would be { bobsId: { alicesId: true }, alicesId: { bobsId: true } }
+function countInbounds (graph, id) {
+  var n = 0
+  for (var id2 in graph)
+    if (graph[id2][id])
+      n++
+  return n
+}
+
+// helper to count how many nodes in the graph the given ID points to
+// - see `countInbounds` comment for more info
+function countOutbounds(graph, id) {
+  return Object.keys(graph[id] || {}).length
+}
+
+// take the feeds and graphs, produce textual list items
+function feedsToListItems (feeds, follows, flags) {
+  // sort by highest sequence to lowest sequence
+  feeds.sort(function (a, b) {
+    return b.sequence - a.sequence
+  })
+
+  // produce a list of labels
+  return feeds.map(function (f) {
+    var info = [
+      &#39;seq: &#39;     + f.sequence,
+      &#39;follows: &#39; + countOutbounds(follows, f.id) + &#39;/&#39; + countInbounds(follows, f.id),
+      &#39;flags: &#39;   + countOutbounds(flags, f.id)   + &#39;/&#39; + countInbounds(flags, f.id)
+    ]
+    return f.id + &#39;[&#39; + info.join(&#39; &#39;) + &#39;]&#39;
+  })
+}
+</code></pre>
+<p>In <code>feed.js</code>, the list is a simple stream-fetch:</p>
+<pre><code class="lang-js">pull(sbot.createUserStream({ id: userId }), pull.collect(function (err, log) {
+  // ...
+}))
+</code></pre>
+<p><code>graph.js</code> uses the same code in <code>feeds.js</code>, but it applies a filter.
+It generates the filter using this function:</p>
+<pre><code class="lang-js">function filteredFeeds (graph, inbound, label) {
+  var included = {}
+  sbot.friends.all(graph, function (err, g) {
+    if (inbound) {
+      // collect feeds with an edge to `userId`
+      for (var id2 in g)
+        if (g[id2][userId])
+          included[id2] = true
+    } else {
+      // use the already-computed `userId` edges
+      included = g[userId] || {}
+    }
+  })
+  function filter (entry) {
+    return included[entry.id]
+  }
+  // ...
+}
+</code></pre>
+<p>Here&#39;s how it&#39;s applied to create the four graph-filters:</p>
+<pre><code class="lang-js">var graphs = {
+  &#39;follows&#39;:   filteredFeeds(&#39;follow&#39;, false, &#39;Follows&#39;),
+  &#39;followers&#39;: filteredFeeds(&#39;follow&#39;, true, &#39;Followers&#39;),
+  &#39;flags&#39;:     filteredFeeds(&#39;flag&#39;, false, &#39;Flags&#39;),
+  &#39;flaggers&#39;:  filteredFeeds(&#39;flag&#39;, true, &#39;Flaggers&#39;),
+}
+</code></pre>
+<p><code>blobs.js</code> collects every reference to a blob made by the given <code>userId</code>, and lists them in the form:</p>
+<pre><code>blobid (N references)
+</code></pre><p>It does this by first searching for any messages by <code>userId</code> that link to a blob.
+Then, it groups the messages by blob, producing the final list.</p>
+<pre><code class="lang-js">var blobs, blobMessageMap = {}
+pull(
+  // fetch messages by `userId` which link to a blob
+  sbot.links({ source: userId, dest: &#39;&amp;&#39;, values: true }),
+
+  // group together messages that publish a blob
+  pull.filter(function (index) {
+    var blobId = index.dest
+    if (!blobMessageMap[blobId]) {
+      blobMessageMap[blobId] = [index]
+      return true
+    }
+    blobMessageMap[blobId].push(index)
+    return false
+  }),
+
+  // collect into an array
+  pull.collect(function (err, _blobs) {
+    if (err) throw err
+    blobs = _blobs
+
+    // sort by the number of references to the blob
+    blobs.sort(function (a, b) {
+      return blobMessageMap[b.dest].length - blobMessageMap[a.dest].length
+    })
+
+    // render in the list widget
+    var listItems = blobs.map(function (index) { 
+      return index.dest + &#39; (&#39;+blobMessageMap[index.dest].length+&#39; references)&#39;
+    })
+    listWidget.setItems(listItems)
+    listWidget.select(0)
+    screen.render()
+  })
+)
+</code></pre>
+<p>Finally, <code>gossip.js</code> simply polls the status of the gossip-network and renders it periodically.</p>
+<pre><code class="lang-js">function poll () {
+  sbot.gossip.peers(function (err, peers) {
+    if (err) throw err
+    table.setData(peersToTableData(peers))
+    screen.render()
+  })
+}
+
+poll()
+setInterval(poll, 1000)
+
+function status (peer) {
+  if (peer.connected)
+    return &#39;Connected&#39;
+  if (peer.time &amp;&amp; peer.time.connect &gt; peer.time.attempt)
+    return &#39;Connecting&#39;
+  if (peer.failure)
+    return peer.failure + &#39; Failures&#39;
+  return &#39;Disconnected&#39;
+}
+
+function peersToTableData (peers) {
+  peers.sort(function (a, b) {
+    var an = (a.announcers) ? a.announcers.length : 0
+    var bn = (b.announcers) ? b.announcers.length : 0
+    return bn - an
+  })
+
+  return {
+    headers: [&#39;Announcers&#39;, &#39;Address&#39;, &#39;Status&#39;],
+    data: peers.map(function (p) {
+      return [
+        (p.announcers) ? p.announcers.length : 0,
+        p.host + &#39;:&#39; + p.port + &#39;:&#39; + p.key,
+        status(p)
+      ]
+    })
+  }
+}
+</code></pre>
+
+        </div>
+      </div>
+    </body>
+  </html>
