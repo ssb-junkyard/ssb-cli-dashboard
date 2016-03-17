@@ -1,5 +1,5 @@
 {
-  "name": "ssb-blessed-dashboard",
+  "name": "ssb-cli-dashboard",
   "version": "1.0.0",
   "description": "A cli dashboard for scuttlebot",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ssbc/ssb-blessed-dashboard.git"
+    "url": "git+https://github.com/ssbc/ssb-cli-dashboard.git"
   },
   "keywords": [
     "ssb",
@@ -19,9 +19,9 @@
   "author": "Paul Frazee <pfrazee@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ssbc/ssb-blessed-dashboard/issues"
+    "url": "https://github.com/ssbc/ssb-cli-dashboard/issues"
   },
-  "homepage": "https://github.com/ssbc/ssb-blessed-dashboard#readme",
+  "homepage": "https://github.com/ssbc/ssb-cli-dashboard#readme",
   "dependencies": {
     "blessed": "^0.1.81",
     "blessed-contrib": "^2.3.3",
