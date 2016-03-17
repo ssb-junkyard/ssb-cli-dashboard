@@ -1,8 +1,8 @@
-# SSB Blessed Dashboard
+# SSB CLI Dashboard
 
 ```
-git clone https://github.com/ssbc/ssb-blessed-dashboard.git
-cd ssb-blessed-dashboard
+git clone https://github.com/ssbc/ssb-cli-dashboard.git
+cd ssb-cli-dashboard
 npm install
 ```
 
